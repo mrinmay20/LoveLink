@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your Love Page ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(-45deg,#ff758c,#ff7eb3,#ff6a88,#ff99ac);
+background-size:400% 400%;
+animation:gradient 12s ease infinite;
+}
+
+@keyframes gradient{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+max-width:1200px;
+margin:50px auto;
+display:flex;
+gap:30px;
+padding:20px;
+flex-wrap:wrap;
+}
+
+.form-box{
+flex:1;
+min-width:320px;
+background:rgba(255,255,255,0.2);
+backdrop-filter:blur(20px);
+padding:30px;
+border-radius:20px;
+color:white;
+}
+
+.preview{
+flex:1;
+min-width:320px;
+background:white;
+border-radius:20px;
+padding:30px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+input,textarea,select{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+outline:none;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:30px;
+background:#ff4b6e;
+color:white;
+cursor:pointer;
+transition:0.3s;
+margin:5px 0;
+}
+
+button:hover{
+transform:scale(1.05);
+background:#ff1f50;
+}
+
+.step{display:none;}
+.step.active{display:block;}
+
+.preview img{
+max-width:130px;
+border-radius:50%;
+margin:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Premium Section */
+.premium-box{
+display:none;
+background:rgba(0,0,0,0.2);
+padding:15px;
+border-radius:15px;
+margin-top:15px;
+}
+
+.unlock-btn{
+background:gold;
+color:black;
+font-weight:600;
+}
+
+.footer-section {
+    width: 100%;
+    padding: 20px 0;
+    margin-top: 180px;
+    background: rgba(255, 255, 255, 0.1); /* Glassmorphism effect */
+    backdrop-filter: blur(5px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.footer-section p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.footer-section a {
+    color: #eae2e4; /* Romantic pink to match the theme */
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.footer-section a:hover {
+    color: #4248c5;
+    text-shadow: 0 0 8px rgba(6, 6, 6, 0.6);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="form-box">
+
+<form method="POST" enctype="multipart/form-data">
+
+<input type="hidden" name="payment_done" id="payment_done" value="no">
+
+<!-- STEP 1 -->
+<div class="step active">
+<h3>Step 1: Enter Names 💕</h3>
+
+<input type="text" id="yourName" name="your_name" placeholder="Your Name" required>
+<input type="text" id="partnerName" name="partner_name" placeholder="Partner Name" required>
+
+<button type="button" onclick="nextStep()">Next ➡</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step">
+<h3>Step 2: Love Message 💌</h3>
+
+<textarea id="message" name="message" placeholder="Write your love message..." rows="4"></textarea>
+
+<button type="button" onclick="prevStep()">⬅ Back</button>
+<button type="button" onclick="nextStep()">Next ➡</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="step">
+<h3>Step 3: Upload Photos 📸</h3>
+
+<label>Your Photo</label>
+<input type="file" id="yourPhoto" name="your_photo" accept="image/*">
+
+<label>Partner Photo</label>
+<input type="file" id="partnerPhoto" name="partner_photo" accept="image/*">
+
+<button type="button" onclick="prevStep()">⬅ Back</button>
+<button type="button" onclick="nextStep()">Next ➡</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="step">
+<h3>Step 4: Customize 💎</h3>
+
+<label>Select Theme</label>
+<select name="theme">
+<option value="romantic">Romantic Pink</option>
+<option value="dark">Dark Love</option>
+<option value="cute">Cute Pink</option>
+<option value="blue">Blue Sky</option>
+</select>
+
+<label>Select Music</label>
+<select name="music">
+<option value="">Default Music</option>
+<option value="love.mp3">Romantic Song</option>
+</select>
+
+<label>Select Plan</label>
+<select name="plan" id="planSelect">
+<option value="free">Free (7 days)</option>
+<option value="premium">Premium (30 days)</option>
+</select>
+
+<!-- BUY PREMIUM BUTTON -->
+<div id="buyPremiumArea" style="display:none;">
+<button type="button" class="unlock-btn" onclick="unlockPremium()">
+💎 Buy Premium For More Love
+</button>
+</div>
+
+<!-- PREMIUM FEATURES -->
+<div class="premium-box" id="premiumBox">
+
+<h4>Premium Features Unlocked 💎</h4>
+
+<label>Upload Background Music</label>
+<input type="file" name="custom_music" accept="audio/*">
+
+<label>Upload Love Video</label>
+<input type="file" name="video_file" accept="video/*">
+
+<label>Upload Multiple Images</label>
+<input type="file" name="images" accept="image/*" multiple>
+
+</div>
+
+<label>Expiry Date</label>
+<input type="date" name="expiry_date">
+
+<label>Password (Optional)</label>
+<input type="text" name="password">
+
+<button type="button" onclick="prevStep()">⬅ Back</button>
+<button type="submit">Generate Love Page 💖</button>
+
+</div>
+
+</form>
+</div>
+
+<!-- PREVIEW SECTION -->
+<div class="preview">
+<h2 id="previewYour">Your Name</h2>
+<h3>❤️</h3>
+<h2 id="previewPartner">Partner Name</h2>
+<p id="previewMsg">Your message will appear here...</p>
+
+<img id="previewYourImg" style="display:none;">
+<img id="previewPartnerImg" style="display:none;">
+</div>
+
+</div>
+
+
+
+<!--footer section-->
+<footer class="footer-section">
+    <div class="container">
+        <p>&copy; 2026 Mrinmay | Developed by MGCyberWorld</p>
+        <p>Contact: <a href="mailto:mgcyber.worlds@gmail.com">mgcyber.worlds@gmail.com</a></p>
+    </div>
+</footer>
+<script>
+
+/* Multi Step */
+let currentStep = 0;
+const steps = document.querySelectorAll(".step");
+
+function nextStep(){
+if(currentStep < steps.length-1){
+steps[currentStep].classList.remove("active");
+currentStep++;
+steps[currentStep].classList.add("active");
+}
+}
+
+function prevStep(){
+if(currentStep > 0){
+steps[currentStep].classList.remove("active");
+currentStep--;
+steps[currentStep].classList.add("active");
+}
+}
+
+/* Plan Selection */
+document.getElementById("planSelect").addEventListener("change", function(){
+if(this.value === "premium"){
+document.getElementById("buyPremiumArea").style.display = "block";
+}else{
+document.getElementById("buyPremiumArea").style.display = "none";
+document.getElementById("premiumBox").style.display = "none";
+document.getElementById("payment_done").value = "no";
+}
+});
+
+/* Unlock Premium */
+function unlockPremium(){
+alert("Payment Successful 💎 Premium Activated!");
+document.getElementById("premiumBox").style.display = "block";
+document.getElementById("payment_done").value = "yes";
+}
+
+/* Live Preview */
+yourName.oninput = e => previewYour.innerText = e.target.value;
+partnerName.oninput = e => previewPartner.innerText = e.target.value;
+message.oninput = e => previewMsg.innerText = e.target.value;
+
+/* Image Preview */
+function previewImage(input, previewId){
+if(input.files[0]){
+const reader = new FileReader();
+reader.onload = e=>{
+const img = document.getElementById(previewId);
+img.src = e.target.result;
+img.style.display="inline-block";
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
+
+yourPhoto.onchange = function(){ previewImage(this,"previewYourImg"); };
+partnerPhoto.onchange = function(){ previewImage(this,"previewPartnerImg"); };
+
+/* Confetti */
+document.querySelector("form").addEventListener("submit", function(){
+confetti({particleCount:150,spread:100,origin:{y:0.6}});
+});
+
+</script>
+
+</body>
+</html>
